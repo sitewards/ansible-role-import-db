@@ -1,0 +1,12 @@
+---
+## Where values are commented out, it means that you must populate them in your playbooks. They are necessarily
+## secret, or specific to the playbook.
+
+## The S3 bucket that contains the database dump to download.
+# import_db_s3_bucket:
+
+## The object name in S3. Should be of the form "foo_bar.sql.gz"
+# import_db_s3_object_name:
+
+## The region that contains the S3 bucket
+# import_db_s3_region:
