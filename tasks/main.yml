@@ -35,18 +35,18 @@
 
 - name: "Delete the old database"
   mysql_db:
-    name: "{{ mysql_database_name }}"
+    name: "{{ import_db_database_name }}"
     state: "absent"
-    login_password: "{{ mysql_root_password }}"
+    login_password: "{{ import_db_root_password }}"
     login_user: "root"
   when: "s3db.changed"
 
 - name: "Restore the database"
   mysql_db:
-    name: "{{ mysql_database_name }}"
+    name: "{{ import_db_database_name }}"
     state: "import"
     target: "/tmp/db_dump.sql"
-    login_password: "{{ mysql_root_password }}"
+    login_password: "{{ import_db_root_password }}"
     login_user: "root"
 
 - name: "Clean up the db from /tmp"
