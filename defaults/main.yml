@@ -3,10 +3,21 @@
 ## secret, or specific to the playbook.
 
 ## The S3 bucket that contains the database dump to download.
+## (Required)
 # import_db_s3_bucket:
 
 ## The object name in S3. Should be of the form "foo_bar.sql.gz"
+## (Required)
 # import_db_s3_object_name:
 
 ## The region that contains the S3 bucket
+## (Required)
 # import_db_s3_region:
+
+## The database to import into
+## (Required)
+# import_db_database_name:
+
+## The root password of the database server
+## (Required)
+# import_db_root_password:
