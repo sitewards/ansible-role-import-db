@@ -21,3 +21,8 @@
 ## The root password of the database server
 ## (Required)
 # import_db_root_password:
+
+## The AWS access keys. The key information is documented at the following URL:
+## http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+import_db_aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+import_db_aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
