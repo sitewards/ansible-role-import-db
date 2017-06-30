@@ -18,8 +18,8 @@
     object: "{{ import_db_s3_object_name }}"
     dest: "/tmp/db_dump.sql.gz"
     region: "{{ import_db_s3_region }}"
-    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
-    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+    aws_access_key: "{{ import_db_aws_access_key_id }}"
+    aws_secret_key: "{{ import_db_aws_secret_access_key }}"
     mode: "get"
   register: "s3db"
 
