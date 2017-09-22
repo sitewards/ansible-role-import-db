@@ -1,0 +1,49 @@
+---
+# Note: The AWS keys are deliberately omitted for this task. They should be set in the session:
+#   $ export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
+#   $ export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_KEY"
+- name: "Download the copy of the DB from S3"
+  aws_s3:
+    bucket: "{{ import_db_s3_bucket }}"
+    object: "{{ import_db_s3_object_name }}"
+    dest: "/tmp/db_dump.sql.gz"
+    region: "{{ import_db_s3_region }}"
+    aws_access_key: "{{ import_db_aws_access_key_id }}"
+    aws_secret_key: "{{ import_db_aws_secret_access_key }}"
+    mode: "get"
+  register: "s3db"
+
+# Note: Ansible does not support plain .gz files as part of its "unarchive" module, as they are not strictly speaking
+# archives. See
+#   - https://github.com/ansible/ansible-modules-extras/pull/1301
+#   - https://github.com/ansible/ansible-modules-core/issues/1035
+- name: "Unpack the DB"
+  command: "gzip -d /tmp/db_dump.sql.gz"
+  args:
+    creates: "/tmp/db_dump.sql"
+  when: "s3db.changed"
+
+- name: "Delete the old database"
+  mysql_db:
+    name: "{{ import_db_database_name }}"
+    state: "absent"
+    login_password: "{{ import_db_root_password }}"
+    login_user: "root"
+  when: "s3db.changed"
+
+- name: "Restore the database"
+  mysql_db:
+    name: "{{ import_db_database_name }}"
+    state: "import"
+    target: "/tmp/db_dump.sql"
+    login_password: "{{ import_db_root_password }}"
+    login_user: "root"
+
+- name: "Clean up the db from /tmp"
+  file:
+    path: "{{ item }}"
+    state: "absent"
+  with_items:
+    - "/tmp/db_dump.sql"
+    - "/tmp/db_dump.sql.gz"
+  when: "s3db.changed"

@@ -1,0 +1,18 @@
+---
+- name: "Install tools required to fetch/unpack content from AWS"
+  package:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - "gzip"
+  become: "True"
+  become_user: "root"
+
+- name: "Install the required python packages"
+  pip:
+    name: "{{ item }}"
+    state: "latest"
+  become: "True"
+  become_user: "root"
+  with_items:
+    - "boto3"
