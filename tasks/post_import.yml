@@ -1,5 +1,21 @@
 ---
 - name: "Execute sql query"
   command: >
-      mysql --user=root --password={{ import_db_root_password }}" {{ import_db_database_name }}"
+      env MYSQL_PWD={{ import_db_root_password }}
+      mysql --user=root {{ import_db_database_name }}
       --execute="{{ import_db_post_import_sql_query.query }}"
+  no_log: true
+  ignore_errors: true
+  register: import_db_post_import_sql_query_result
+
+- debug:
+    msg: '{{ import_db_post_import_sql_query_result.stderr | regex_replace(import_db_root_password) }}'
+  when: import_db_post_import_sql_query_result.stderr != ""
+
+- debug:
+    msg: '{{ import_db_post_import_sql_query_result.stdout | regex_replace(import_db_root_password) }}'
+  when: import_db_post_import_sql_query_result.stdout != ""
+
+- fail:
+    msg: "error in sql querry"
+  when: import_db_post_import_sql_query_result.stderr != ""
