@@ -26,3 +26,8 @@
 ## http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
 import_db_aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
 import_db_aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+
+## Define some sql queries, that are executed after the db is imported
+import_db_post_import_sql_queries: []
+  ## The query that should be executed
+  # - query: ""
