@@ -1,4 +1,9 @@
 ---
+- name: "Make sure temp folder exists"
+  file:
+    path: "{{ import_db_tmp_path }}"
+    state: "directory"
+
 # Note: The AWS keys are deliberately omitted for this task. They should be set in the session:
 #   $ export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
 #   $ export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_KEY"
@@ -6,22 +11,22 @@
   aws_s3:
     bucket: "{{ import_db_s3_bucket }}"
     object: "{{ import_db_s3_object_name }}"
-    dest: "/tmp/db_dump.sql.gz"
+    dest: "{{ import_db_tmp_path }}/db_dump.sql.gz"
     region: "{{ import_db_s3_region }}"
     aws_access_key: "{{ import_db_aws_access_key_id }}"
     aws_secret_key: "{{ import_db_aws_secret_access_key }}"
     mode: "get"
-  register: "s3db"
+  register: "import_db_downloaded_archive"
 
 # Note: Ansible does not support plain .gz files as part of its "unarchive" module, as they are not strictly speaking
 # archives. See
 #   - https://github.com/ansible/ansible-modules-extras/pull/1301
 #   - https://github.com/ansible/ansible-modules-core/issues/1035
 - name: "Unpack the DB"
-  command: "gzip -d /tmp/db_dump.sql.gz"
+  command: "gzip -d {{ import_db_tmp_path }}/db_dump.sql.gz"
   args:
-    creates: "/tmp/db_dump.sql"
-  when: "s3db.changed"
+    creates: "{{ import_db_tmp_path }}/db_dump.sql"
+  when: "import_db_downloaded_archive.changed"
 
 - name: "Delete the old database"
   mysql_db:
@@ -29,13 +34,13 @@
     state: "absent"
     login_password: "{{ import_db_root_password }}"
     login_user: "root"
-  when: "s3db.changed"
+  when: "import_db_downloaded_archive.changed"
 
 - name: "Restore the database"
   mysql_db:
     name: "{{ import_db_database_name }}"
     state: "import"
-    target: "/tmp/db_dump.sql"
+    target: "{{ import_db_tmp_path }}/db_dump.sql"
     login_password: "{{ import_db_root_password }}"
     login_user: "root"
 
@@ -44,6 +49,6 @@
     path: "{{ item }}"
     state: "absent"
   with_items:
-    - "/tmp/db_dump.sql"
-    - "/tmp/db_dump.sql.gz"
-  when: "s3db.changed"
+    - "{{ import_db_tmp_path }}/db_dump.sql"
+    - "{{ import_db_tmp_path }}/db_dump.sql.gz"
+    - "{{ import_db_tmp_path }}"

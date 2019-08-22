@@ -31,3 +31,6 @@ import_db_aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
 import_db_post_import_sql_queries: []
   ## The query that should be executed
   # - query: ""
+
+## Tmp path to put downloaded files while preparing them for import
+import_db_tmp_path: "/tmp/import_db"
