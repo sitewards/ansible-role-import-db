@@ -1,0 +1,28 @@
+---
+#- name: "Download the copy of the DB from Azure Storage"
+#  azure_rm_storageblob:
+#    resource_group: "{{ lookup('env','AZURE_PROD_RESOURCE_GROUP') }}"
+#    storage_account_name: "{{ lookup('env','AZURE_STORAGE_ACCOUNT') }}"
+#    container: "{{ import_db_azure_container_name }}"
+#    blob: "{{ import_db_azure_object_name }}"
+#    dest: "{{ import_db_tmp_path }}/db_dump.sql.gz"
+#  environment:
+#    AZURE_CLIENT_ID:       "{{ lookup('env','AZURE_CLIENT_ID') }}"
+#    AZURE_SECRET:          "{{ lookup('env','AZURE_SECRET') }}"
+#    AZURE_TENANT:          "{{ lookup('env','AZURE_TENANT') }}"
+#    AZURE_SUBSCRIPTION_ID: "{{ lookup('env','AZURE_SUBSCRIPTION_ID') }}"
+#    AZURE_STORAGE_ACCOUNT: "{{ lookup('env','AZURE_STORAGE_ACCOUNT') }}"
+#    AZURE_STORAGE_KEY:     "{{ lookup('env','AZURE_STORAGE_KEY') }}"
+#  register: "import_db_downloaded_archive"
+#
+# This expects to authenticate based on the invokers Azure credentials, supplied through environment variables
+- name: "Download the copy of the DB from Azure Storage"
+  shell: |
+      AZURE_CLIENT_ID="{{ lookup('env','AZURE_CLIENT_ID') }}" \
+      AZURE_SECRET="{{ lookup('env','AZURE_SECRET') }}" \
+      AZURE_TENANT="{{ lookup('env','AZURE_TENANT') }}" \
+      AZURE_SUBSCRIPTION_ID="{{ lookup('env','AZURE_SUBSCRIPTION_ID') }}" \
+      AZURE_STORAGE_ACCOUNT="{{ lookup('env','AZURE_STORAGE_ACCOUNT') }}" \
+      AZURE_STORAGE_KEY="{{ lookup('env','AZURE_STORAGE_KEY') }}" \
+      az storage blob download --container-name="{{ import_db_azure_container_name }}" --file={{ import_db_tmp_path }}/db_dump.sql.gz  --name={{ import_db_azure_object_name }}
+  register: "import_db_downloaded_archive"

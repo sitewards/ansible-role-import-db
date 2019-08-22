@@ -1,5 +1,5 @@
 ---
-- name: "Install tools required to fetch/unpack content from AWS"
+- name: "Install tools required to fetch/unpack content from storage provider"
   package:
     name: "{{ item }}"
     state: "present"
@@ -8,11 +8,5 @@
   become: "True"
   become_user: "root"
 
-- name: "Install the required python packages"
-  pip:
-    name: "{{ item }}"
-    state: "latest"
-  become: "True"
-  become_user: "root"
-  with_items:
-    - "boto3"
+- name: "Install dependencies for corresponding storage provider"
+  include: "dependencies/{{ import_db_storage_provider }}.yml"

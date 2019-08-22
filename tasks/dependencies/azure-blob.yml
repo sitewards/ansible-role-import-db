@@ -1,0 +1,11 @@
+---
+- name: "Install the required python packages for Azure"
+  pip:
+    name: "{{ item }}"
+    state: "latest"
+  become: "True"
+  become_user: "root"
+  with_items:
+    - packaging
+    - msrestazure
+    - ansible[azure]

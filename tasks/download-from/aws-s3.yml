@@ -1,0 +1,14 @@
+---
+# Note: The AWS keys are deliberately omitted for this task. They should be set in the session:
+#   $ export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
+#   $ export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_KEY"
+- name: "Download the copy of the DB from AWS S3"
+  aws_s3:
+    bucket: "{{ import_db_s3_bucket }}"
+    object: "{{ import_db_s3_object_name }}"
+    dest: "{{ import_db_tmp_path }}/db_dump.sql.gz"
+    region: "{{ import_db_s3_region }}"
+    aws_access_key: "{{ import_db_aws_access_key_id }}"
+    aws_secret_key: "{{ import_db_aws_secret_access_key }}"
+    mode: "get"
+  register: "import_db_downloaded_archive"
