@@ -1,3 +1,9 @@
 ---
 - include: "dependencies.yml"
 - include: "import.yml"
+
+- name: "Run post import quries"
+  include: "post_import.yml"
+  with_items: "{{ import_db_post_import_sql_queries }}"
+  loop_control:
+      loop_var: "import_db_post_import_sql_query"
