@@ -2,6 +2,11 @@
 ## Where values are commented out, it means that you must populate them in your playbooks. They are necessarily
 ## secret, or specific to the playbook.
 
+## The name of the database storage provider (AWS S3 or Azure Blob Storage)
+## (required)
+import_db_storage_provider: "aws-s3"
+#import_db_storage_provider: "azure-blob"
+
 ## The S3 bucket that contains the database dump to download.
 ## (Required)
 # import_db_s3_bucket:
@@ -13,6 +18,12 @@
 ## The region that contains the S3 bucket
 ## (Required)
 # import_db_s3_region:
+
+## The name of Azure Blob container that is used to get database snapshots from
+#import_db_azure_container_name: "sql-dumps"
+
+## The name of Azure Blob object, i.e. filename of database snapshot
+#import_db_azure_object_name: 
 
 ## The database to import into
 ## (Required)
@@ -31,3 +42,6 @@ import_db_aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
 import_db_post_import_sql_queries: []
   ## The query that should be executed
   # - query: ""
+
+## Tmp path to put downloaded files while preparing them for import
+import_db_tmp_path: "/tmp/import_db"
