@@ -1,0 +1,9 @@
+---
+- name: "Clean up tmp db files"
+  file:
+    path: "{{ item }}"
+    state: "absent"
+  with_items:
+    - "{{ import_db_tmp_path }}/db_dump.sql"
+    - "{{ import_db_tmp_path }}/db_dump.sql.gz"
+    - "{{ import_db_tmp_path }}"
