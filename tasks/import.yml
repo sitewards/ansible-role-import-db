@@ -25,20 +25,20 @@
     login_user: "root"
   when: "import_db_downloaded_archive.changed"
 
-- name: "Restore the database asyncronously"
+- name: "Restore the database asynchronously"
   mysql_db:
     name: "{{ import_db_database_name }}"
     state: "import"
     target: "{{ import_db_tmp_path }}/db_dump.sql"
     login_password: "{{ import_db_root_password }}"
     login_user: "root"
-  async: 600
+  async: import_db_async_timeout
   poll: 0
   notify: "Clean up tmp db files"
   register: import_db_sleeper
   when: import_db_allow_async
 
-- name: "Restore the database syncronously"
+- name: "Restore the database synchronously"
   mysql_db:
     name: "{{ import_db_database_name }}"
     state: "import"

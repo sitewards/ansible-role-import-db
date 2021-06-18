@@ -55,3 +55,7 @@ import_db_tmp_path: "/tmp/import_db"
 #      until: job_result.finished
 #      retries: 30
 import_db_allow_async: false
+
+## Async operation timeout, in seconds
+## set to a higher value if you have a bigger database dump
+import_db_async_timeout: 600
