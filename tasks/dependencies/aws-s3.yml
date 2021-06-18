@@ -1,9 +1,7 @@
 ---
 - name: "Install the required python packages for AWS"
   pip:
-    name: "{{ item }}"
+    name: ['boto3']
     state: "latest"
   become: "True"
   become_user: "root"
-  with_items:
-    - "boto3"
