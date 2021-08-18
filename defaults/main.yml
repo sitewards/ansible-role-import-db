@@ -55,3 +55,11 @@ import_db_tmp_path: "/tmp/import_db"
 #      until: job_result.finished
 #      retries: 30
 import_db_allow_async: false
+
+## This is the list of required dependencies for Azure
+## do not override this variable unless you know what you are doing,
+## package dependencies should only be overridden in edge cases or to enforce a specific version
+azure_python_package_dependencies:
+    - packaging
+    - msrestazure
+    - ansible[ azure ]

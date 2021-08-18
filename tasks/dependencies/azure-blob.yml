@@ -5,7 +5,4 @@
     state: "latest"
   become: "True"
   become_user: "root"
-  with_items:
-    - packaging
-    - msrestazure
-    - ansible[azure]
+  with_items: "{{ azure_python_package_dependencies }}"
