@@ -4,7 +4,7 @@
     name:
       - "gzip"
     state: "present"
-  become: "True"
+  become: true
   become_user: "root"
 
 - name: "Install dependencies for corresponding storage provider"

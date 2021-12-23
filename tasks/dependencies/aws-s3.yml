@@ -3,5 +3,5 @@
   pip:
     name: ['boto3']
     state: "latest"
-  become: "True"
+  become: true
   become_user: "root"

@@ -3,5 +3,5 @@
   pip:
     name: "{{ azure_python_package_dependencies }}"
     state: "latest"
-  become: "True"
+  become: true
   become_user: "root"
