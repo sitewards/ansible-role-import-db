@@ -1,8 +1,7 @@
 ---
 - name: "Install the required python packages for Azure"
   pip:
-    name: "{{ item }}"
+    name: "{{ azure_python_package_dependencies }}"
     state: "latest"
-  become: "True"
+  become: true
   become_user: "root"
-  with_items: "{{ azure_python_package_dependencies }}"

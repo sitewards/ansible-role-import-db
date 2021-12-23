@@ -1,11 +1,10 @@
 ---
 - name: "Install tools required to fetch/unpack content from storage provider"
   package:
-    name: "{{ item }}"
+    name:
+      - "gzip"
     state: "present"
-  with_items:
-    - "gzip"
-  become: "True"
+  become: true
   become_user: "root"
 
 - name: "Install dependencies for corresponding storage provider"
